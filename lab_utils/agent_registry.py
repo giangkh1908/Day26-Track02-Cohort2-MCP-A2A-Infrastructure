@@ -6,6 +6,8 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
 
+import httpx
+
 
 @dataclass
 class RegisteredAgent:
@@ -38,6 +40,35 @@ class AgentRegistry:
         if healthy_only:
             agents = [agent for agent in agents if agent.healthy]
         return agents
+
+    def health_check(self, name: str, timeout: float = 5.0) -> bool:
+        agent = self._agents.get(name)
+        if agent is None:
+            return False
+
+        card_url = agent.url.rstrip("/") + "/.well-known/agent-card.json"
+        candidate_urls = [card_url]
+        if "localhost" in card_url:
+            candidate_urls.append(card_url.replace("localhost", "127.0.0.1"))
+
+        healthy = False
+        for url in candidate_urls:
+            try:
+                response = httpx.get(url, timeout=timeout)
+                if response.status_code == 200:
+                    healthy = True
+                    break
+            except httpx.HTTPError:
+                continue
+
+        agent.healthy = healthy
+        return healthy
+
+    def health_check_all(self, timeout: float = 5.0) -> dict[str, bool]:
+        return {
+            name: self.health_check(name, timeout=timeout)
+            for name in list(self._agents)
+        }
 
     def find_by_capability(self, keyword: str) -> list[RegisteredAgent]:
         keyword_lower = keyword.lower()

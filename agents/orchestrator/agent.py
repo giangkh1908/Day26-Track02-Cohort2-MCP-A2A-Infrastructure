@@ -30,15 +30,15 @@ from lab_utils.routing_tool import suggest_routing
 
 SEARCH_CARD = os.getenv(
     "SEARCH_AGENT_CARD",
-    "http://localhost:8001/.well-known/agent-card.json",
+    "http://127.0.0.1:8001/.well-known/agent-card.json",
 )
 DATABASE_CARD = os.getenv(
     "DATABASE_AGENT_CARD",
-    "http://localhost:8002/.well-known/agent-card.json",
+    "http://127.0.0.1:8002/.well-known/agent-card.json",
 )
 SYNTHESIS_CARD = os.getenv(
     "SYNTHESIS_AGENT_CARD",
-    "http://localhost:8003/.well-known/agent-card.json",
+    "http://127.0.0.1:8003/.well-known/agent-card.json",
 )
 
 MCP_SERVER = PROJECT_ROOT / "mcp_server" / "research_tools_server.py"

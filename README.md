@@ -18,6 +18,16 @@ export PYTHONPATH=$PWD
 jupyter notebook day26_mcp_a2a_lab.ipynb
 ```
 
+Windows PowerShell:
+
+```powershell
+conda activate pii-env
+pip install -r requirements.txt
+Copy-Item .env.example .env
+$env:PYTHONPATH = (Get-Location).Path
+jupyter notebook day26_mcp_a2a_lab.ipynb
+```
+
 > **Lưu ý `cryptography`:** Lab ghim `cryptography>=46.0.7,<47.0.0` để tương thích với `agent-governance-toolkit-core`. Nếu bạn dùng `presidio-anonymizer` bản cũ (2.2.360), hãy nâng cấp: `pip install -U "presidio-anonymizer>=2.2.363"`. Chạy lab trong conda env riêng (`pii-env`) để tránh xung đột package với base Anaconda.
 
 ## Cấu trúc dự án
@@ -83,6 +93,15 @@ bash scripts/start_synthesis_agent.sh   # :8003
 
 # Dừng
 bash scripts/stop_a2a_servers.sh
+```
+
+Windows PowerShell:
+
+```powershell
+.\scripts\start_capstone.ps1
+.\scripts\start_a2a_servers.ps1
+.\scripts\start_adk_web.ps1
+.\scripts\stop_a2a_servers.ps1
 ```
 
 ```bash
